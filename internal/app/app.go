@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"musicadviser/internal/concerts"
-
+	_ "github.com/jackc/pgx/v5/stdlib" // Import the pgx driver
+	"github.com/jmoiron/sqlx"
 	"golang.org/x/sync/errgroup"
 	"log"
-
+	"musicadviser/internal/music"
+	fridgeStore "musicadviser/internal/music/postgres"
 	"net/http"
 	"os"
 	"os/signal"
@@ -39,10 +40,18 @@ func New(ctx context.Context, config *Config) (*App, error) {
 }
 
 func (a *App) Setup(ctx context.Context, dsn string) error {
-	// Directly create the service and handler without storage
-	service := concerts.NewAppService(nil) // Pass nil or a mock if needed
-	handler := concerts.NewHandler(a.router, service)
+	db, err := sqlx.ConnectContext(ctx, "pgx", dsn)
+	if err != nil {
+		return err
+	}
+
+	store := fridgeStore.NewStorage(db)
+
+	service := music.NewAppService(store)
+	handler := music.NewHandler(a.router, service)
 	handler.Register()
+
+	// shelfService := shelf.NewAppService(store)
 
 	return nil
 }
@@ -53,7 +62,7 @@ func (a *App) Start() error {
 
 	errs, ctx := errgroup.WithContext(ctx)
 
-	log.Printf("starting web server on port %s", a.config.Port)
+	log.Println("starting web server on port %s", a.config.Port)
 
 	errs.Go(func() error {
 		if err := a.http.ListenAndServe(); err != nil {
@@ -64,9 +73,11 @@ func (a *App) Start() error {
 
 	<-ctx.Done()
 
+	// Restore default behavior on the interrupt signal and notify user of shutdown.
 	stop()
 	log.Println("shutting down gracefully")
 
+	// Perform application shutdown with a maximum timeout of 5 seconds.
 	timeoutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
