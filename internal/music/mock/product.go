@@ -1,8 +1,8 @@
 package mock
 
 import (
-	"aggregconcerts/internal/concerts"
 	"context"
+	"musicadviser/internal/music"
 
 	"github.com/google/uuid"
 )
@@ -13,8 +13,8 @@ func NewFridge() *Mock {
 	return &Mock{}
 }
 
-func (m *Mock) Products(ctx context.Context) ([]concerts.Product, error) {
-	products := []concerts.Product{
+func (m *Mock) Products(ctx context.Context) ([]music.Product, error) {
+	products := []music.Product{
 		{
 			ID:    uuid.New().String(),
 			Name:  "Test name",
@@ -25,6 +25,6 @@ func (m *Mock) Products(ctx context.Context) ([]concerts.Product, error) {
 	return products, nil
 }
 
-func (m *Mock) Place(ctx context.Context, product concerts.Product) (id string, err error) {
+func (m *Mock) Place(ctx context.Context, product music.Product) (id string, err error) {
 	return uuid.New().String(), nil
 }

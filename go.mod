@@ -1,4 +1,4 @@
-module aggregconcerts
+module musicadviser
 
 go 1.23
 

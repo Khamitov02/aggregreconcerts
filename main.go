@@ -1,9 +1,9 @@
 package main
 
 import (
-	"aggregconcerts/internal/app"
 	"context"
 	"log"
+	"musicadviser/internal/app"
 )
 
 func main() {

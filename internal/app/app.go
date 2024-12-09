@@ -1,14 +1,15 @@
 package app
 
 import (
-	"aggregconcerts/internal/concerts"
-	fridgeStore "aggregconcerts/internal/concerts/memory"
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	_ "github.com/jackc/pgx/v5/stdlib" // Import the pgx driver
+	"github.com/jmoiron/sqlx"
 	"golang.org/x/sync/errgroup"
 	"log"
+	"musicadviser/internal/music"
+	fridgeStore "musicadviser/internal/music/postgres"
 	"net/http"
 	"os"
 	"os/signal"
@@ -39,11 +40,15 @@ func New(ctx context.Context, config *Config) (*App, error) {
 }
 
 func (a *App) Setup(ctx context.Context, dsn string) error {
+	db, err := sqlx.ConnectContext(ctx, "pgx", dsn)
+	if err != nil {
+		return err
+	}
 
-	store := fridgeStore.NewStorage()
+	store := fridgeStore.NewStorage(db)
 
-	service := concerts.NewAppService(store)
-	handler := concerts.NewHandler(a.router, service)
+	service := music.NewAppService(store)
+	handler := music.NewHandler(a.router, service)
 	handler.Register()
 
 	// shelfService := shelf.NewAppService(store)
