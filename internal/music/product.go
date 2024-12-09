@@ -10,6 +10,11 @@ type Product struct {
 	BandName  string
 }
 
+type Concert struct {
+	BandName string
+	Link     string
+}
+
 type Service interface {
 	Products(ctx context.Context) ([]Product, error)
 	Place(ctx context.Context, product Product) (id string, err error)
