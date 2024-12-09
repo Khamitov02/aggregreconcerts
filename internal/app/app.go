@@ -38,15 +38,9 @@ func New(ctx context.Context, config *Config) (*App, error) {
 }
 
 func (a *App) Setup(ctx context.Context, dsn string) error {
-	db, err := sqlx.ConnectContext(ctx, "pgx", dsn)
-	if err != nil {
-		return err
-	}
-
-	store := music.NewStorage(db)
-
-	service := music.NewAppService(store)
-	handler := music.NewHandler(a.router, service)
+	// Directly create the service and handler without storage
+	service := concerts.NewAppService(nil) // Pass nil or a mock if needed
+	handler := concerts.NewHandler(a.router, service)
 	handler.Register()
 
 	return nil
