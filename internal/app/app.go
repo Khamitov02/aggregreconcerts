@@ -8,8 +8,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/sync/errgroup"
 	"log"
-	"musicadviser/internal/music"
-	fridgeStore "musicadviser/internal/music/postgres"
+	"musicadviser/internal/recommends"
+	fridgeStore "musicadviser/internal/recommends/postgres"
 	"net/http"
 	"os"
 	"os/signal"
@@ -47,8 +47,8 @@ func (a *App) Setup(ctx context.Context, dsn string) error {
 
 	store := fridgeStore.NewStorage(db)
 
-	service := music.NewAppService(store)
-	handler := music.NewHandler(a.router, service)
+	service := recommends.NewAppService(store)
+	handler := recommends.NewHandler(a.router, service)
 	handler.Register()
 
 	// shelfService := shelf.NewAppService(store)

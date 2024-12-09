@@ -1,4 +1,4 @@
-package music_test
+package recommends_test
 
 // в тестах:
 // вместо мока использовать пакет memory (для мока БД)

@@ -1,4 +1,4 @@
-package music
+package recommends
 
 import (
 	"encoding/json"
@@ -59,7 +59,7 @@ func (h *Handler) putMusic(w http.ResponseWriter, r *http.Request) {
 			UserID:   req.UserID,
 			BandName: bandName,
 		}
-		
+
 		_, err := h.service.Place(r.Context(), product)
 		if err != nil {
 			// If the band already exists, continue to the next one

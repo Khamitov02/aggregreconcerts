@@ -1,13 +1,13 @@
-package music
+package recommends
 
 import (
 	"context"
 )
 
 type Product struct {
-	ID        string
-	UserID    string
-	BandName  string
+	ID       string
+	UserID   string
+	BandName string
 }
 
 type Service interface {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"musicadviser/internal/music"
+	"musicadviser/internal/recommends"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -25,7 +25,7 @@ func NewStorage(db *sqlx.DB) *Storage {
 	}
 }
 
-func (s *Storage) LoadProducts(ctx context.Context) ([]music.Product, error) {
+func (s *Storage) LoadProducts(ctx context.Context) ([]recommends.Product, error) {
 	var dbProducts []Product
 	query := "SELECT ID, user_id, band_name FROM music_bands"
 
@@ -34,13 +34,13 @@ func (s *Storage) LoadProducts(ctx context.Context) ([]music.Product, error) {
 		return nil, fmt.Errorf("failed to select products: %w", err)
 	}
 
-	var products []music.Product
+	var products []recommends.Product
 	for _, dbProduct := range dbProducts {
 		if !dbProduct.ID.Valid || !dbProduct.UserID.Valid || !dbProduct.BandName.Valid {
 			return nil, fmt.Errorf("one of the required fields is NULL")
 		}
 
-		product := music.Product{
+		product := recommends.Product{
 			ID:       dbProduct.ID.String,
 			UserID:   dbProduct.UserID.String,
 			BandName: dbProduct.BandName.String,
@@ -51,10 +51,10 @@ func (s *Storage) LoadProducts(ctx context.Context) ([]music.Product, error) {
 	return products, nil
 }
 
-func (s *Storage) SaveProduct(ctx context.Context, product music.Product) (id string, err error) {
+func (s *Storage) SaveProduct(ctx context.Context, product recommends.Product) (id string, err error) {
 	// First check if this band already exists for this user
 	var exists bool
-	err = s.db.QueryRowContext(ctx, 
+	err = s.db.QueryRowContext(ctx,
 		"SELECT EXISTS(SELECT 1 FROM music_bands WHERE user_id = $1 AND band_name = $2)",
 		product.UserID, product.BandName).Scan(&exists)
 	if err != nil {

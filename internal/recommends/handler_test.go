@@ -1,9 +1,9 @@
-package music_test
+package recommends_test
 
 import (
 	"encoding/json"
-	"musicadviser/internal/music"
-	"musicadviser/internal/music/mock"
+	"musicadviser/internal/recommends"
+	"musicadviser/internal/recommends/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,7 +16,7 @@ func TestHandler_getProducts(t *testing.T) {
 	service := mock.NewFridge()
 	router := chi.NewRouter()
 
-	h := music.NewHandler(router, service)
+	h := recommends.NewHandler(router, service)
 
 	h.Register()
 
@@ -35,13 +35,13 @@ func TestHandler_getProducts(t *testing.T) {
 	})
 
 	t.Run("body", func(t *testing.T) {
-		var got music.Product
+		var got recommends.Product
 		err := json.NewDecoder(rr.Body).Decode(&got)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		want := music.Product{
+		want := recommends.Product{
 			// заполнить данными из мока
 		}
 

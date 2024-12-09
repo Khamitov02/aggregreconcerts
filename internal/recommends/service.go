@@ -1,4 +1,4 @@
-package music
+package recommends
 
 import (
 	"context"
