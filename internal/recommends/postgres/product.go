@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"musicadviser/internal/recommends"
+	"aggregconcerts/internal/recommends"
 
 	"github.com/jmoiron/sqlx"
 )
