@@ -21,9 +21,9 @@ func (s *AppService) Products(ctx context.Context) ([]Product, error) {
 	products, err := s.store.LoadProducts(ctx)
 	if err != nil {
 		if errors.Is(err, oops.ErrNoData) {
-			//..
+			return nil, nil
 		}
-		return nil, fmt.Errorf("firdge.Products() error: %w", err)
+		return nil, fmt.Errorf("Products() error: %w", err)
 	}
 
 	return products, nil
