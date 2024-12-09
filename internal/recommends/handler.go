@@ -12,11 +12,11 @@ import (
 )
 
 type Handler struct {
-	router         *chi.Mux
-	service        Service
-	concerts       []Concert
+	router          *chi.Mux
+	service         Service
+	concerts        []Concert
 	recommendations map[string][]Concert
-	mu             sync.Mutex
+	mu              sync.Mutex
 }
 
 type Concert struct {
@@ -30,8 +30,8 @@ type ConcertRequest struct {
 
 func NewHandler(router *chi.Mux, service Service) *Handler {
 	return &Handler{
-		router:         router,
-		service:        service,
+		router:          router,
+		service:         service,
 		recommendations: make(map[string][]Concert),
 	}
 }
@@ -45,14 +45,14 @@ func (h *Handler) Register() {
 
 func (h *Handler) putConcerts(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received PUT request to /api/v1/putConcerts")
-	
+
 	var req ConcertRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("Error decoding request body: %v", err)
 		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
 		return
 	}
-	
+
 	log.Printf("Received concerts data: %+v", req.Bands)
 
 	h.mu.Lock()
@@ -60,15 +60,15 @@ func (h *Handler) putConcerts(w http.ResponseWriter, r *http.Request) {
 	h.mu.Unlock()
 
 	log.Printf("Successfully stored %d concerts", len(req.Bands))
-	
+
 	w.WriteHeader(http.StatusCreated)
 	fmt.Fprintf(w, "Concerts added successfully")
 }
 
 func (h *Handler) getRecommendations(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received GET request to /api/v1/getRecommendations")
-	
-	resp, err := http.Get("http://localhost:3434/api/v1/getMusic")
+
+	resp, err := http.Get("http://localhost:3433/api/v1/getMusic")
 	if err != nil {
 		log.Printf("Error fetching user bands: %v", err)
 		http.Error(w, "Failed to fetch user bands", http.StatusInternalServerError)
@@ -118,6 +118,6 @@ func (h *Handler) getRecommendations(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to encode recommendations", http.StatusInternalServerError)
 		return
 	}
-	
+
 	log.Printf("Successfully sent recommendations response")
 }
