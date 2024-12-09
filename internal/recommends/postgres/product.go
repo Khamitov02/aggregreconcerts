@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"aggregconcerts/internal/recommends"
+	"aggregreconcerts/internal/recommends"
 
 	"github.com/jmoiron/sqlx"
 )

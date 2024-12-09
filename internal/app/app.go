@@ -1,6 +1,8 @@
 package app
 
 import (
+	"aggregreconcerts/internal/recommends"
+	fridgeStore "aggregreconcerts/internal/recommends/postgres"
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -8,8 +10,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/sync/errgroup"
 	"log"
-	"aggregconcerts/internal/recommends"
-	fridgeStore "aggregconcerts/internal/recommends/postgres"
 	"net/http"
 	"os"
 	"os/signal"

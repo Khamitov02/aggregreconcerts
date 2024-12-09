@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"sync"

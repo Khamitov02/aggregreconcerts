@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"musicadviser/internal/oops"
+	"aggregreconcerts/internal/oops"
 )
 
 type AppService struct {

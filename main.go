@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"log"
-	"musicadviser/internal/app"
+	"aggregreconcerts/internal/app"
 )
 
 func main() {
