@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"github.com/jmoiron/sqlx"
+	"musicadviser/internal/concerts"
+
 	"golang.org/x/sync/errgroup"
 	"log"
-	"musicadviser/internal/music"
+
 	"net/http"
 	"os"
 	"os/signal"
