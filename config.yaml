@@ -1,0 +1,4 @@
+host: "localhost"
+port: "3434"
+database:
+  dsn: "postgres://postgres:@localhost:5432/postgres"
